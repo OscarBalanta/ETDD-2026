@@ -24,7 +24,7 @@ public class MAP {
 
     public static void main(String[] args) {
         MAP mapa = new MAP();
-        mapa.verificarClave("101");
+        mapa.verificarClave("103");
         mapa.verificarClave("104");
         
     } 
