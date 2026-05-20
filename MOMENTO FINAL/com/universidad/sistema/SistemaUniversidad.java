@@ -1,60 +1,90 @@
 package com.universidad.sistema;
 
 import java.util.HashMap;
-import java.util.TreeMap;
 
-import com.universidad.modelo.Aula;
-import com.universidad.modelo.Estudiante;
-import com.universidad.modelo.Materia;
+import com.universidad.modelo.*;
+import com.universidad.estructuras.GestorDeshacer;
+import com.universidad.procesos.ProcesadorInscripciones;
 
 public class SistemaUniversidad {
 
     
     private HashMap<String, Estudiante> estudiantes;
+
     private HashMap<String, Materia> materias;
-    private TreeMap<String, Aula> aulas;
 
     
+    private GestorDeshacer gestor;
+
+    private ProcesadorInscripciones procesador;
+
     public SistemaUniversidad() {
 
         estudiantes = new HashMap<>();
+
         materias = new HashMap<>();
-        aulas = new TreeMap<>();
+
+        gestor = new GestorDeshacer();
+
+        procesador =
+                new ProcesadorInscripciones(this);
     }
 
     
-    public void registrarEstudiante(Estudiante estudiante) {
+    public void registrarEstudiante(
+            Estudiante estudiante) {
 
-        estudiantes.put(estudiante.getId(), estudiante);
+        estudiantes.put(
+                estudiante.getId(),
+                estudiante);
     }
 
     
-    public Estudiante buscarEstudiante(String id) {
+    public void registrarMateria(
+            Materia materia) {
+
+        materias.put(
+                materia.getCodigo(),
+                materia);
+    }
+
+    
+    public Estudiante buscarEstudiante(
+            String id) {
 
         return estudiantes.get(id);
     }
 
-    
-    public void registrarMateria(Materia materia) {
-
-        materias.put(materia.getCodigo(), materia);
-    }
-
-    
-    public Materia buscarMateria(String codigo) {
+  
+    public Materia buscarMateria(
+            String codigo) {
 
         return materias.get(codigo);
     }
 
     
-    public void registrarAula(Aula aula) {
+    public ProcesadorInscripciones
+    getProcesador() {
 
-        aulas.put(aula.getNombre(), aula);
+        return procesador;
     }
 
-    
-    public Aula buscarAula(String nombre) {
+    public GestorDeshacer
+    getGestor() {
 
-        return aulas.get(nombre);
+        return gestor;
     }
+
+
+   public HashMap<String, Estudiante>
+getEstudiantes() {
+
+    return estudiantes;
+}
+
+public HashMap<String, Materia>
+getMaterias() {
+
+    return materias;
+}
 }

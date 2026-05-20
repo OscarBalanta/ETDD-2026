@@ -9,7 +9,7 @@ public class Aula {
     
     public Aula(String nombre) {
 
-        this.nombre = nombre;
+        this.nombre = nombre;  
 
         
         this.horario = new boolean[7][24];
