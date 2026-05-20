@@ -6,45 +6,60 @@ public class Main {
 
     public static void main(String[] args) {
 
-          // CREador del sistema universitario GENERALL
+        System.out.println("INICIANDO MAIN");
+
+        // PROBAR SI EL ARCHIVO EXISTE
+        java.io.File archivo =
+                new java.io.File(
+                        "/workspaces/ETDD-2026/MOMENTO FINAL/datos/estudiantes.csv");
+
+        System.out.println(
+                "¿Existe archivo?: "
+                        + archivo.exists());
+
+        // CREAR SISTEMA
         SistemaUniversidad sistema =
                 new SistemaUniversidad();
 
-         // CaRgador del Datos desde Csv a University sistem
+        // CARGAR ESTUDIANTES
         CargadorDatos.cargarEstudiantes(
-                "datos/estudiantes.csv",
+                "/workspaces/ETDD-2026/MOMENTO FINAL/datos/estudiantes.csv",
                 sistema);
 
+        // CARGAR MATERIAS
         CargadorDatos.cargarMaterias(
-                "datos/materias.csv",
+                "/workspaces/ETDD-2026/MOMENTO FINAL/datos/materias.csv",
                 sistema);
 
-                 // SOLicitudes de Inscripcion desde CSV
+        // CARGAR SOLICITUDES
         CargadorDatos.cargarSolicitudes(
-                "datos/solicitudes.csv",
+                "/workspaces/ETDD-2026/MOMENTO FINAL/datos/solicitudes.csv",
                 sistema);
 
-        // PROCESAMIENTO de las solicitudes de inscripcion
+        // PROCESAR SOLICITUDES
         sistema.getProcesador()
                 .procesarSolicitudes();
 
-        
+        // REPORTES
         System.out.println(
                 "\n=== ESTUDIANTES ===");
 
-        GeneradorReportes.mostrarEstudiantes(
-                sistema.getEstudiantes());
+        GeneradorReportes
+                .mostrarEstudiantes(
+                        sistema.getEstudiantes());
 
         System.out.println(
                 "\n=== MATERIAS ===");
 
-        GeneradorReportes.mostrarMaterias(
-                sistema.getMaterias());
-                 
-                    System.out.println(
-                    "\n=== DESHACER ===");
+        GeneradorReportes
+                .mostrarMaterias(
+                        sistema.getMaterias());
 
-            sistema.getGestor()
-                    .deshacer();
+        // DESHACER
+        System.out.println(
+                "\n=== DESHACER ===");
+
+        sistema.getGestor()
+                .deshacer();
     }
 }

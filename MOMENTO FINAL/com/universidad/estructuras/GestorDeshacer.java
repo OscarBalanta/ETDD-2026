@@ -1,62 +1,35 @@
 package com.universidad.estructuras;
 
 import com.universidad.acciones.Accion;
-import com.universidad.acciones.AccionInscribir;
 
 import java.util.Stack;
 
 public class GestorDeshacer {
 
-    
-    private Stack<Accion> pilaDeshacer;
-    private Stack<Accion> pilaRehacer;
+    private Stack<Accion> acciones;
 
-    
+    // CONSTRUCTOR
     public GestorDeshacer() {
 
-        pilaDeshacer = new Stack<>();
-        pilaRehacer = new Stack<>();
+        acciones = new Stack<>();
     }
 
-    
-    public void ejecutarAccion(Accion accion) {
+    // GUARDAR ACCION
+    public void guardarAccion(
+            Accion accion) {
 
-        accion.ejecutar();
-
-        pilaDeshacer.push(accion);
-
-        pilaRehacer.clear();
+        acciones.push(accion);
     }
 
-    
+    // DESHACER
     public void deshacer() {
 
-        if (!pilaDeshacer.isEmpty()) {
+        if (!acciones.isEmpty()) {
 
-            Accion accion = pilaDeshacer.pop();
+            Accion accion =
+                    acciones.pop();
 
             accion.deshacer();
-
-            pilaRehacer.push(accion);
         }
-    }
-
-   
-    public void rehacer() {
-
-        if (!pilaRehacer.isEmpty()) {
-
-            Accion accion = pilaRehacer.pop();
-
-            accion.ejecutar();
-
-            pilaDeshacer.push(accion);
-        }
-    }
-
-
-    public void guardarAccion(AccionInscribir accion) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'guardarAccion'");
     }
 }

@@ -2,90 +2,93 @@ package com.universidad.modelo;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.ArrayDeque;
 
 public class Materia {
 
-    
     private String codigo;
     private String nombre;
-    private int cuposMaximos;
-    private int cuposDisponibles;
+
+    private int cupos;
     private int creditos;
 
-    
-    private LinkedList<Materia> prerequisitos;
+    private int inscritos;
 
-    
+   
     private Queue<Estudiante> colaEspera;
 
-    public Materia(String codigo, String nombre,
-                   int cuposMaximos, int creditos) {
+    // CONSTRUCTOR
+    public Materia(
+            String codigo,
+            String nombre,
+            int cupos,
+            int creditos) {
 
         this.codigo = codigo;
         this.nombre = nombre;
-        this.cuposMaximos = cuposMaximos;
-        this.cuposDisponibles = cuposMaximos;
+
+        this.cupos = cupos;
         this.creditos = creditos;
 
-        
-        this.prerequisitos = new LinkedList<>();
-        this.colaEspera = new ArrayDeque<>();
-    }
+        inscritos = 0;
 
-    
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public int getCuposDisponibles() {
-        return cuposDisponibles;
-    }
-
-    public int getCreditos() {
-        return creditos;
-    }
-
-    public LinkedList<Materia> getPrerequisitos() {
-        return prerequisitos;
-    }
-
-    public Queue<Estudiante> getColaEspera() {
-        return colaEspera;
-    }
-
-    
-    public void agregarPrerequisito(Materia materia) {
-        prerequisitos.add(materia);
-    }
-
-    
-    public boolean hayCupo() {
-        return cuposDisponibles > 0;
+        colaEspera =
+                new LinkedList<>();
     }
 
     
     public void inscribirEstudiante() {
 
-        if (cuposDisponibles > 0) {
-            cuposDisponibles--;
+        if (hayCupo()) {
+
+            inscritos++;
         }
     }
 
-    
-    public void liberarCupo() {
+   
+    public void cancelarInscripcion() {
 
-        if (cuposDisponibles < cuposMaximos) {
-            cuposDisponibles++;
+        if (inscritos > 0) {
+
+            inscritos--;
         }
     }
 
+   
+    public boolean hayCupo() {
+
+        return inscritos < cupos;
+    }
+
     
-    public void agregarACola(Estudiante estudiante) {
+    public void agregarACola(
+            Estudiante estudiante) {
+
         colaEspera.offer(estudiante);
+    }
+
+    
+    public String getCodigo() {
+
+        return codigo;
+    }
+
+    public String getNombre() {
+
+        return nombre;
+    }
+
+    public int getCupos() {
+
+        return cupos;
+    }
+
+    public int getCreditos() {
+
+        return creditos;
+    }
+
+    public int getInscritos() {
+
+        return inscritos;
     }
 }

@@ -24,7 +24,7 @@ public class LectorCSV {
 
         } catch (IOException e) {
 
-            System.out.println("Error leyendo CSV");
+            System.out.println(e.getMessage());
         }
 
         return datos;

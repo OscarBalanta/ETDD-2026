@@ -1,0 +1,184 @@
+@startuml
+package "com.universidad.modelo" {
+  abstract class Persona {
+    - nombre: String
+    - id: String
+    - email: String
+    + Persona(nombre, id, email)
+    + getNombre(): String
+    + getId(): String
+    + getEmail(): String
+    + setNombre(nombre)
+    + setId(id)
+    + setEmail(email)
+    + mostrarInformacion()
+  }
+
+  class Estudiante {
+    - semestre: int
+    - notas: Double[][]
+    - historialMaterias: LinkedList<Materia>
+    + Estudiante(nombre, id, email, semestre)
+    + getSemestre(): int
+    + setSemestre(semestre)
+    + getNotas(): Double[][]
+    + getHistorialMaterias(): LinkedList<Materia>
+    + registrarNota(semestre, materia, nota)
+    + calcularPromedio(): double
+    + mostrarInformacion()
+  }
+
+  class Materia {
+    - codigo: String
+    - nombre: String
+    - cupos: int
+    - creditos: int
+    - inscritos: int
+    - colaEspera: Queue<Estudiante>
+    + Materia(codigo, nombre, cupos, creditos)
+    + inscribirEstudiante()
+    + cancelarInscripcion()
+    + hayCupo(): boolean
+    + agregarACola(estudiante)
+    + getCodigo(): String
+    + getNombre(): String
+    + getCupos(): int
+    + getCreditos(): int
+    + getInscritos(): int
+  }
+
+  class Aula {
+    - nombre: String
+    - horario: boolean[][]
+    + Aula(nombre)
+    + getNombre(): String
+    + consultarDisponibilidad(dia, hora): boolean
+    + reservar(dia, hora, duracion): boolean
+    + liberar(dia, hora, duracion)
+  }
+
+  class SolicitudInscripcion {
+    - idEstudiante: String
+    - codigoMateria: String
+    + SolicitudInscripcion(idEstudiante, codigoMateria)
+    + getIdEstudiante(): String
+    + getCodigoMateria(): String
+  }
+}
+
+package "com.universidad.acciones" {
+  abstract class Accion {
+    - descripcion: String
+    + Accion(descripcion)
+    + getDescripcion(): String
+    + ejecutar()
+    + deshacer()
+  }
+
+  class AccionInscribir {
+    - estudiante: Estudiante
+    - materia: Materia
+    + AccionInscribir(estudiante, materia)
+    + ejecutar()
+    + deshacer()
+  }
+}
+
+package "com.universidad.sistema" {
+  class SistemaUniversidad {
+    - estudiantes: HashMap<String, Estudiante>
+    - materias: HashMap<String, Materia>
+    - gestor: GestorDeshacer
+    - procesador: ProcesadorInscripciones
+    + SistemaUniversidad()
+    + registrarEstudiante(estudiante)
+    + registrarMateria(materia)
+    + buscarEstudiante(id): Estudiante
+    + buscarMateria(codigo): Materia
+    + getProcesador(): ProcesadorInscripciones
+    + getGestor(): GestorDeshacer
+    + getEstudiantes(): HashMap<String, Estudiante>
+    + getMaterias(): HashMap<String, Materia>
+  }
+}
+
+package "com.universidad.procesos" {
+  class ProcesadorInscripciones {
+    - colaSolicitudes: Queue<SolicitudInscripcion>
+    - sistema: SistemaUniversidad
+    + ProcesadorInscripciones(sistema)
+    + agregarSolicitud(solicitud)
+    + procesarSolicitudes()
+  }
+}
+
+package "com.universidad.validacion" {
+  class ValidadorInscripcion {
+    + validar(estudiante, materia): boolean
+  }
+}
+
+package "com.universidad.util" {
+  class CargadorDatos {
+    + cargarEstudiantes(ruta, sistema)
+    + cargarMaterias(ruta, sistema)
+    + cargarSolicitudes(ruta, sistema)
+  }
+
+  class LectorCSV {
+    + leer(ruta): ArrayList<String[]>
+  }
+}
+
+package "com.universidad.estructuras" {
+  class GestorDeshacer {
+    - acciones: Stack<Accion>
+    + GestorDeshacer()
+    + guardarAccion(accion)
+    + deshacer()
+  }
+}
+
+package "com.universidad.reportes" {
+  class GeneradorReportes {
+    + mostrarEstudiantes(estudiantes)
+    + mostrarMaterias(materias)
+  }
+
+  class GestorReportes {
+    - estudiantesOrdenados: TreeMap<String, Estudiante>
+    + GestorReportes()
+    + agregarEstudiante(estudiante)
+    + mostrarEstudiantes()
+  }
+}
+
+class Main {
+  + main(args)
+}
+
+Persona <|-- Estudiante
+Accion <|-- AccionInscribir
+SistemaUniversidad o-- "0..*" Estudiante : estudiantes
+SistemaUniversidad o-- "0..*" Materia : materias
+SistemaUniversidad o-- GestorDeshacer : gestor
+SistemaUniversidad o-- ProcesadorInscripciones : procesador
+ProcesadorInscripciones --> SolicitudInscripcion : colaSolicitudes
+ProcesadorInscripciones --> SistemaUniversidad : sistema
+ProcesadorInscripciones ..> ValidadorInscripcion
+ProcesadorInscripciones ..> AccionInscribir
+AccionInscribir --> Estudiante
+AccionInscribir --> Materia
+Materia --> "0..*" Estudiante : colaEspera
+CargadorDatos ..> LectorCSV
+CargadorDatos --> SistemaUniversidad
+CargadorDatos ..> SolicitudInscripcion
+Main --> SistemaUniversidad
+Main ..> CargadorDatos
+Main ..> GeneradorReportes
+Main --> GestorDeshacer : sistema.getGestor()
+GeneradorReportes --> Estudiante
+GeneradorReportes --> Materia
+GestorDeshacer --> Accion
+
+@enduml

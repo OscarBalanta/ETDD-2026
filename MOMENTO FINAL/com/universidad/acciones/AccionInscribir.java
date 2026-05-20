@@ -29,6 +29,10 @@ public class AccionInscribir extends Accion {
     @Override
     public void deshacer() {
 
-        materia.liberarCupo();
+           materia.cancelarInscripcion();
+
+        System.out.println(
+                "Inscripción deshecha: "
+                + estudiante.getNombre());
     }
 }
